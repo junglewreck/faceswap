@@ -1,4 +1,8 @@
 import argparse
+import numpy
+import cv2
+
+from lib.convert import convert_one_image
 
 from pathlib import Path
 from lib.align_images import iter_face_alignments, find_faces
@@ -11,6 +15,7 @@ output_dir = input_dir / "output"
 input_files = list( input_dir.glob( "*.jpg" ) )
 assert len( input_files ) > 0, "Can't find input files"
 
+i = 0;
 for fn in input_files:
     image = cv2.imread( str(fn) )
     if image is None:
@@ -29,5 +34,9 @@ for fn in input_files:
         mat = numpy.array(mat).reshape(2,3)
         new_image = convert_one_image( image, mat )
 
-        output_file = output_dir / Path(image_file).name
+        output_file = output_dir / Path(fn).name
         cv2.imwrite( str(output_file), new_image )
+
+        i += 1
+        cv2.imwrite( str(output_dir / "face{}.jpg".format(str(i))), face )
+        print(output_file)

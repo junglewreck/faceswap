@@ -1,5 +1,4 @@
 import cv2
-import numpy
 from pathlib import Path
 
 from lib.utils import get_image_paths, get_folder
