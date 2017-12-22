@@ -7,7 +7,7 @@ from umeyama import umeyama
 from face_alignment import FaceAlignment, LandmarksType
 
 def monkey_patch_face_detector(_):
-    detector = dlib.get_frontal_face_detector()
+    detector = dlib.get_frontal_face_detector() # TODO use face_recognition module
     class Rect(object):
         def __init__(self,rect):
             self.rect=rect
@@ -38,19 +38,18 @@ mean_face_y = numpy.array([
 
 landmarks_2D = numpy.stack( [ mean_face_x, mean_face_y ], axis=1 )
 
+def find_faces( image ):
+    faces = FACE_ALIGNMENT.get_landmarks( image )
+
+def iter_face_alignments( image, faces ):
+    for i,face in enumerate(faces):
+        alignment = umeyama( face[17:], landmarks_2D, True )[0:2]
+        aligned_image = transform( image, alignment, 160, 48 )
+
+        yield aligned_image, list( alignment.ravel() )
+
 def transform( image, mat, size, padding=0 ):
     mat = mat * size
     mat[:,2] += padding
     new_size = int( size + padding * 2 )
     return cv2.warpAffine( image, mat, ( new_size, new_size ) )
-
-def find_faces( image ):
-
-    faces = FACE_ALIGNMENT.get_landmarks( image )
-
-def iter_face_alignments( image, faces ):
-    for i,points in enumerate(faces):
-        alignment = umeyama( points[17:], landmarks_2D, True )[0:2]
-        aligned_image = transform( image, alignment, 160, 48 )
-
-        yield aligned_image, list( alignment.ravel() )

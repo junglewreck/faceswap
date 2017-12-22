@@ -10,7 +10,9 @@ encoder  .load_weights( "models/encoder.h5"   )
 decoder_A.load_weights( "models/decoder_A.h5" )
 decoder_B.load_weights( "models/decoder_B.h5" )
 
-def convert_one_image( autoencoder, image, mat ):
+autoencoder = autoencoder_B
+
+def convert_one_image( image, mat ):
     size = 64
     face = cv2.warpAffine( image, mat * size, (size,size) )
     face = numpy.expand_dims( face, 0 )
@@ -20,7 +22,3 @@ def convert_one_image( autoencoder, image, mat ):
     image_size = image.shape[1], image.shape[0]
     cv2.warpAffine( new_face, mat * size, image_size, new_image, cv2.WARP_INVERSE_MAP, cv2.BORDER_TRANSPARENT )
     return new_image
-
-def convert():
-    mat = numpy.array(mat).reshape(2,3)
-    return convert_one_image( autoencoder, image, mat )
