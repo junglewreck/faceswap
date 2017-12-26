@@ -6,4 +6,6 @@ https://www.reddit.com/r/deepfakes/comments/7lae4c/face_alignment_scripts_based_
 https://github.com/1adrianb/face-alignment
 
 python3 align_images.py /your/images/folder - to align images
+
+
 python3 merge_faces.py /your/images/folder - merging
